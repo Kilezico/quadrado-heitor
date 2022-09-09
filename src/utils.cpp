@@ -1,12 +1,18 @@
 #include <raylib.h>
 #include "utils.hpp"
 #include <math.h>
-
+#include <iostream>
 #include <string>
 // Objeto
 Objeto::Objeto() {}
 Objeto::Objeto(Texture2D tex, Vector2 pos)
-    : tex(tex), pos(pos) {} 
+    : tex(tex), pos(pos)
+{
+    hitbox.x = pos.x;
+    hitbox.y = pos.y;
+    hitbox.width = (float) tex.width;
+    hitbox.height = (float) tex.height;
+}
 
 
 void Objeto::draw()

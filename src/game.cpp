@@ -15,19 +15,29 @@ namespace game
     Objeto nuvens[3];
     std::vector<Objeto> grama;
 
+    std::vector<Objeto> obstaculos;
+    Texture2D pedra;
+    int obstaculos_delta = 120;
+
     int vel = 5;
 
     Heitor heitor;
 
     bool isPaused = false;
     bool changeToTitle = false;
+    bool first = true;
 
     int pontuacao = 0;
     std::string pontTxt;
     Vector2 pontSize;
+
+    Music musica;
     
     void init()
     {
+        // Inicia sons
+        musica = LoadMusicStream("resourses/audio/musica.wav");
+    
         // Inicia nuvens
         for (int i=0; i<nuvemCount; i++) {
             nuvens[i] = Objeto(LoadTexture("resourses/images/nuvem2.png"),
@@ -40,11 +50,19 @@ namespace game
                 (Vector2){(float)i, (float)GetScreenHeight()-64}));
         }
 
+        // Carrega texturas dos obstáculos
+        pedra = LoadTexture("resourses/images/pedra.png");
+        
         heitor = Heitor(100, 380);
     }
 
     void update()
-    {   
+    { 
+        if (first) {
+            PlayMusicStream(musica);
+            first = false;
+        }
+        UpdateMusicStream(musica);
         if (!isPaused) {
             // Nuvens
             for (int i=0; i<nuvemCount; i++) {
@@ -59,6 +77,21 @@ namespace game
 
                 if (grama[i].pos.x <= -64) grama[i].pos.x += grama.size() * 64;
             }
+            // Obstaculos
+            for (int i=(int)obstaculos.size()-1; i>=0; i--) {
+                obstaculos[i].pos.x -= vel;
+                if (obstaculos[i].pos.x <= -obstaculos[i].tex.width) obstaculos.erase(obstaculos.begin()+i);
+                // Colisão entre Heitor e Caixas
+                if (CheckCollisionRecs(heitor.getHitbox(), obstaculos[i].hitbox)) {
+                    heitor.morre();
+                }
+            }
+            
+            obstaculos_delta--;
+            if (obstaculos_delta <= 0) {
+                obstaculos_delta = GetRandomValue(80, 250);
+                obstaculos.push_back(Objeto(pedra, {(float)GetScreenWidth(), (float)GetScreenHeight()-160}));
+            }
             // Heitor
             heitor.update();
 
@@ -68,9 +101,12 @@ namespace game
             pontTxt = std::to_string(pontuacao/100);
             pontSize = MeasureTextEx(getFont(), pontTxt.c_str(), 40, 0);
         }
-        if (IsKeyPressed(KEY_ESCAPE)) isPaused = !isPaused;
+        if (IsKeyPressed(KEY_ESCAPE)) {
+            isPaused = !isPaused;
 
-        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) changeToTitle = true;
+            if (isPaused) PauseMusicStream(musica);
+            else ResumeMusicStream(musica);
+        }
     }
 
     void draw()
@@ -86,6 +122,11 @@ namespace game
         for (Objeto gram: grama) {
             gram.draw();
         }
+        // Obstáculos
+        for (Objeto obstaculo: obstaculos) {
+            obstaculo.draw();
+        }
+
 
         heitor.draw();
 
@@ -95,8 +136,10 @@ namespace game
 
         if (isPaused) { // Pra desenhar as coisas da tela de pausa
             DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), (Color){0, 0, 0, 50});
-            DrawTextCenter(getFont(), "PAUSADO",
-                {(float)GetScreenWidth()/2, (float)GetScreenHeight()/2}, 0, 30, 5, BLACK);
+            DrawTextLines(getFont(), "PAUSADO",
+                {(float)GetScreenWidth()/2, (float)GetScreenHeight()/2}, 0, 30, 5, BLACK, WHITE, 1);    
+            // DrawTextCenter(getFont(), "PAUSADO",
+                // {(float)GetScreenWidth()/2, (float)GetScreenHeight()/2}, 0, 30, 5, BLACK);
         }
     }
 
@@ -104,6 +147,8 @@ namespace game
     {
         if (changeToTitle) {
             changeToTitle = false;
+            StopMusicStream(musica);
+            first = true; // Pra quando voltar de novo, ser a primeira iteração
             return TITLE;
         }
 

@@ -15,6 +15,7 @@ class Heitor
     Vector2 vel = {0.0f, 0.0f};
     bool noChao = false;
     bool running = true;
+    bool morto = false;
 
     Texture2D* texAtual;
     Texture2D tex;
@@ -25,7 +26,7 @@ class Heitor
     int runCount = 0;
     int runFrameSpeed = 4;
 
-    enum hState{IDLE, RUN, JUMP} heitorState;
+    enum hState{IDLE, RUN, JUMP, DEAD} heitorState;
 
 public:
     Heitor(int x, int y);
@@ -37,6 +38,8 @@ public:
     void jump();
     void run();
     void idle();
+    void morre();
 
+    bool isMorto() { return morto; }
     Rectangle getHitbox() { return hitbox; }
 };

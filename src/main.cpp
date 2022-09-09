@@ -15,7 +15,9 @@ void changeGameState();
 
 int main()
 {    
+    SetConfigFlags(FLAG_MSAA_4X_HINT);
     InitWindow(screenWidth, screenHeight, "O Quadrado Heitor");
+    InitAudioDevice();
 
     SetTargetFPS(60);
     SetExitKey(KEY_NULL);
@@ -45,7 +47,7 @@ int main()
 
     if (IsWindowFullscreen()) ToggleFullscreen();
 
-
+    CloseAudioDevice();
     CloseWindow();
 
     delete getFontPtr();

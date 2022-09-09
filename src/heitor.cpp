@@ -3,7 +3,6 @@
 
 #include "utils.hpp"
 #include "Heitor.hpp"
-#include <iostream>
 
 Heitor::Heitor(int x, int y) 
 {
@@ -108,4 +107,10 @@ void Heitor::idle()
     // idleCount = 0;
     heitorState = IDLE;   
     running = false;
+}
+
+void Heitor::morre()
+{
+    heitorState = DEAD;
+    morto = true;
 }

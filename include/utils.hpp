@@ -16,7 +16,8 @@ class Objeto
 {
 public:
     Texture2D tex;
-    Vector2 pos; 
+    Vector2 pos;
+    Rectangle hitbox;
     Objeto();
     Objeto(Texture2D texture, Vector2 pos);
 
