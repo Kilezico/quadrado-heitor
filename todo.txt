@@ -1,6 +1,0 @@
-ONDE PAREI:
-parei fazendo a musica rodar na parte do jogo, pois preciso dormir. 
-O QUE FAZER:
-Usarei MusicStream mesmo, pois tem mais de 10 segundos, mas tem que ver, e rever, como faz pra não ficar
-todo bugadinho que nem a _coletanea_. Também fazer, talvez, uma tela de gameover. Nada xike, pois demo.
-Tambem efeitos sonoros. Tente usar https://freesound.org, ok?
