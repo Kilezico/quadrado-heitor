@@ -11,6 +11,9 @@ typedef enum {
     TITLE, GAME, EXIT
 } gameState;
 
+enum gamingState {
+    PAUSE, GAMING, END
+};
 
 class Objeto
 {

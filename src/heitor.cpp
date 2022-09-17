@@ -31,7 +31,7 @@ Heitor::Heitor(int x, int y)
     
     texAtual = &tex;
 
-    hitbox.width = (float)tex.width;
+    hitbox.width = (float)tex.width - 30;
     hitbox.height = (float)tex.height - 33;
 
     heitorState = RUN;
@@ -58,8 +58,8 @@ void Heitor::update()
     default: break;
     }
 
+    if (morto) return;
     
-
     pos.x += vel.x;
     pos.y += vel.y;
 
@@ -72,7 +72,7 @@ void Heitor::update()
         heitorState = running ? RUN : IDLE;
     }
 
-    hitbox.x = pos.x;
+    hitbox.x = pos.x + 15; // Ajustes feitos manualmente
     hitbox.y = pos.y + 28;
 }
 
@@ -113,4 +113,10 @@ void Heitor::morre()
 {
     heitorState = DEAD;
     morto = true;
+}
+
+void Heitor::desmorre()
+{
+    heitorState = RUN;
+    morto = false;
 }

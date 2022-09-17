@@ -39,6 +39,7 @@ public:
     void run();
     void idle();
     void morre();
+    void desmorre();
 
     bool isMorto() { return morto; }
     Rectangle getHitbox() { return hitbox; }
