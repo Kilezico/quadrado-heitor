@@ -17,10 +17,9 @@ namespace game
 
     std::vector<Objeto> obstaculos;
     Texture2D pedra;
-    int obstaculos_delta = 120;
+    int obstaculos_delta = 60;
 
-    int vel = 5;
-
+    
     Heitor heitor;
 
     bool isPaused = false;
@@ -67,20 +66,20 @@ namespace game
         if (!isPaused) {
             // Nuvens
             for (int i=0; i<nuvemCount; i++) {
-                nuvens[i].pos.x -= vel + 2;
+                nuvens[i].pos.x -= heitor.getVel() + 2;
 
                 if (nuvens[i].pos.x < -nuvens[i].tex.width)
                     nuvens[i].pos.x = 1200 - nuvens[i].tex.width;
             }
             // Grama
             for (int i=0; i<(int)grama.size(); i++) {
-                grama[i].pos.x -= vel;
+                grama[i].pos.x -= heitor.getVel();
 
                 if (grama[i].pos.x <= -64) grama[i].pos.x += grama.size() * 64;
             }
             // Obstaculos
             for (int i=(int)obstaculos.size()-1; i>=0; i--) {
-                obstaculos[i].pos.x -= vel;
+                obstaculos[i].pos.x -= heitor.getVel();
                 if (obstaculos[i].pos.x <= -obstaculos[i].tex.width) obstaculos.erase(obstaculos.begin()+i);
                 // Atualiza a hitbox
                 obstaculos[i].hitbox.x = obstaculos[i].pos.x + 15;
@@ -92,26 +91,25 @@ namespace game
                 }
             }
             
-            obstaculos_delta -= vel;
+            obstaculos_delta--;
             if (obstaculos_delta <= 0) {
-                obstaculos_delta = GetRandomValue(500, 1000);
+                obstaculos_delta = GetRandomValue(30, 60) + GetRandomValue(30, 60);
                 obstaculos.push_back(Objeto(pedra, {(float)GetScreenWidth(), (float)GetScreenHeight()-160}));
             }
             // Heitor
             heitor.update();
             if (IsKeyPressed(KEY_SPACE)) heitor.jump();
             if (heitor.isMorto()) {
-                vel = 0;
                 PauseMusicStream(musica);
-                if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                    changeToTitle = true;
-                    reset();
-                }
+                setPontAnts(pontuacao/200);
+                WaitTime(2);
+                changeToTitle = true;
+                reset();
             }
 
             // Pontuação
-            pontuacao += vel;
-            pontTxt = std::to_string(pontuacao/100);
+            pontuacao += heitor.getVel(); // Para não agigantar
+            pontTxt = std::to_string(pontuacao/200);
             pontSize = MeasureTextEx(getFont(), pontTxt.c_str(), 40, 0);
         }
         if (IsKeyPressed(KEY_ESCAPE)) {
@@ -138,12 +136,10 @@ namespace game
         // Obstáculos
         for (Objeto obstaculo: obstaculos) {
             obstaculo.draw();
-            DrawRectangleLinesEx(obstaculo.hitbox, 1, RED);
         }
 
 
         heitor.draw();
-        DrawRectangleLinesEx(heitor.getHitbox(),  2, RED);
 
         // DrawTextEx(getFont(), pontTxt.c_str(), {GetScreenWidth()-pontSize.x-10, 10}, 40, 0, WHITE);
         DrawTextLines(getFont(), pontTxt.c_str(), {GetScreenWidth()-(pontSize.x/2.0f)-5, pontSize.y/2.0f+5},
@@ -164,12 +160,11 @@ namespace game
         StopMusicStream(musica);
         first_music = true; // Pra quando voltar de novo, ser a primeira iteração
 
-        heitor.desmorre();
+        heitor.reset();
     
         obstaculos.clear();
         obstaculos_delta = 500;
 
-        vel = 5;
         isPaused = false;
         pontuacao = 0;
     }

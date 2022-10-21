@@ -88,7 +88,12 @@ namespace title
         // DrawTextExCenter(getFont(), "O Quadrado Heitor", {(float)GetScreenWidth()/2, 70}, 50, 5, {255, 0, 0, 255});
         DrawTextLines(getFont(), "O Quadrado Heitor",
             {GetScreenWidth()/2.0f, 70}, sin(delta/35.0f)*3, 50, 5, {255, 0, 0, 255}, BLACK, 4);
-    
+        if (getPontAnts() > 0) {
+            std::string pont_txt = "Pontuação: " + std::to_string(getPontAnts());
+            DrawTextEx(getFont(), pont_txt.c_str(), 
+                {60.0f, 210.0f}, 23, 3, BLACK);
+        }
+
     }
 
     gameState changeState()

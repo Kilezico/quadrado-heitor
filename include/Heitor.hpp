@@ -9,13 +9,16 @@
 
 class Heitor
 {
-    Vector2 pos;
+    Vector2 pos, pos_inicial;
     Rectangle hitbox;
 
     Vector2 vel = {0.0f, 0.0f};
     bool noChao = false;
     bool running = true;
     bool morto = false;
+
+    float corre_vel_ini = 4.5;
+    float corre_vel = corre_vel_ini;
 
     Texture2D* texAtual;
     Texture2D tex;
@@ -24,7 +27,11 @@ class Heitor
     int idleFrameSpeed = 5;
     std::vector<Texture2D> runTex;
     int runCount = 0;
-    int runFrameSpeed = 4;
+    float runFrameSpeed_ini = 6;
+    float runFrameSpeed = runFrameSpeed_ini;
+
+    Sound morte_som;
+    Sound pula_som;
 
     enum hState{IDLE, RUN, JUMP, DEAD} heitorState;
 
@@ -40,7 +47,9 @@ public:
     void idle();
     void morre();
     void desmorre();
+    void reset();
 
     bool isMorto() { return morto; }
     Rectangle getHitbox() { return hitbox; }
+    float getVel() { return corre_vel; }
 };

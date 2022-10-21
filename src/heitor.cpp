@@ -7,7 +7,7 @@
 Heitor::Heitor(int x, int y) 
 {
     pos = {(float)x, (float)y};
-
+    pos_inicial = pos;
     // Carrega texturas
     tex = LoadTexture("resourses/images/heitor.png");
     idleTex.push_back(LoadTexture("resourses/images/idle/heitor-idle1.png"));
@@ -31,10 +31,13 @@ Heitor::Heitor(int x, int y)
     
     texAtual = &tex;
 
-    hitbox.width = (float)tex.width - 30;
+    hitbox.width = (float)tex.width - 50;
     hitbox.height = (float)tex.height - 33;
 
     heitorState = RUN;
+
+    morte_som = LoadSound("resourses/audio/morre.wav");
+    pula_som = LoadSound("resourses/audio/jump.wav");
 }
 
 void Heitor::update()
@@ -72,7 +75,11 @@ void Heitor::update()
         heitorState = running ? RUN : IDLE;
     }
 
-    hitbox.x = pos.x + 15; // Ajustes feitos manualmente
+    corre_vel += 0.003;
+    if (corre_vel > 15) corre_vel = 15;
+    runFrameSpeed = runFrameSpeed_ini / (corre_vel / corre_vel_ini);
+
+    hitbox.x = pos.x + 25; // Ajustes feitos manualmente
     hitbox.y = pos.y + 28;
 }
 
@@ -92,6 +99,7 @@ void Heitor::jump()
             abs(runCount - 4*runFrameSpeed) < abs(runCount - 8*runFrameSpeed))
             runCount = 4*runFrameSpeed;
         else runCount = 0;
+        PlaySound(pula_som);
     }
 }
 
@@ -111,12 +119,30 @@ void Heitor::idle()
 
 void Heitor::morre()
 {
+    corre_vel = 0;
     heitorState = DEAD;
     morto = true;
+    PlaySound(morte_som);
 }
 
 void Heitor::desmorre()
 {
     heitorState = RUN;
     morto = false;
+}
+
+void Heitor::reset()
+{
+    heitorState = RUN;
+    pos = pos_inicial;
+    vel = {0.0f, 0.0f};
+    noChao = false;
+    running = true;
+    morto = false;
+    corre_vel = corre_vel_ini;
+
+    idleCount = 0;
+    idleFrameSpeed = 5;
+    runCount = 0;
+    runFrameSpeed = runFrameSpeed_ini;
 }

@@ -94,7 +94,7 @@ void DrawTextLines(Font font, const char* txt, Vector2 position, float rotation,
 {
     Vector2 txtSize = MeasureTextEx(font, txt, fontSize, spacing);
 
-    for (float angle = 0.0f; angle < 2*PI; angle+=PI/8) {
+    for (float angle = 0.0f; angle < 2*PI; angle+=PI/16) {
         Vector2 outlinePos = {position.x + (cos(angle) * outlineSize), position.y + (sin(angle) * outlineSize)};
         DrawTextPro(font, txt, outlinePos, {txtSize.x/2.0f, txtSize.y/2.0f},  rotation, fontSize, spacing, outline);
     }
@@ -106,3 +106,7 @@ Vector2 GetRectangleCenter(Rectangle rect)
 {
     return {rect.x + rect.width/2, rect.y + rect.height/2};
 }
+
+int pontuacao_antes = 0;
+int getPontAnts() { return pontuacao_antes; }
+void setPontAnts(int spa) { pontuacao_antes = spa; }

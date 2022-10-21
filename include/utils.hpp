@@ -53,3 +53,6 @@ void DrawTextExCenter(Font font, const char* txt, Vector2 position, float fontSi
 void DrawTextCenter(Font font, const char* txt, Vector2 position, float rotation, float fontSize, float spacing, Color tint);
 void DrawTextLines(Font font, const char* txt, Vector2 position, float rotation, float fontSize, float spacing, Color tint, Color outline, float outlineSize);
 Vector2 GetRectangleCenter(Rectangle rect);
+
+int getPontAnts();
+void setPontAnts(int spa);

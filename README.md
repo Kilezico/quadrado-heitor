@@ -23,4 +23,4 @@ Teclado:
 
 
 
-*Copyright (c) $(Year) $(User Name) ($(User Twitter/GitHub Name))*
+*Copyright (c) 2022 KileZico (@)*
