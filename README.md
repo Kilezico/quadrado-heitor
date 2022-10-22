@@ -12,14 +12,14 @@ DEMO do jogo O Quadrado Heitor, com os recursos básicos.
 
  - O Heitor animado que pula;
  - Obstáculos intrusivos;
- - Menu interativo com butões.
+ - Menu interativo com botões.
 
 ### Controles
 
 Teclado:
-- Barra de Espaço
-
-
+- *Barra de Espaço*: Pular
+- *F*: Tela cheia
+- *Escape*: Pausar 
 
 
 
